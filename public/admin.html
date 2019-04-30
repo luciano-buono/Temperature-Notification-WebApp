@@ -1,89 +1,133 @@
 <!DOCTYPE html>
 <html class="h-100">
-    <head>
 
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-            <script
-                  src="https://code.jquery.com/jquery-3.4.0.slim.min.js"
-                  integrity="sha256-ZaXnYkHGqIhqTbJ6MB4l9Frs/r7U4jlx7ir8PJYBqbI="
-                  crossorigin="anonymous">
-                  </script>
-            <link rel="stylesheet" href="css/style.css"/>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<head>
 
-            <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
-            <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
-            <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-database.js"></script> 
-            <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-auth.js"></script>﻿
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script
+        src="https://code.jquery.com/jquery-3.4.0.js"
+        integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo="
+        crossorigin="anonymous"></script>
 
-    </head>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 
-    <body class="h-100">
-        <nav class= "navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    Wallpaper App admin
-                </a>
+    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-auth.js"></script>﻿
 
-                <div class="dropdown navbar-right">
-                    <button 
-                    id="user-email"
-                    class="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    >
-                        luchho_buono@hotmail.com
-                    </button>
-                    <div
-                    class="dropdown-menu"
-                    aria-labelledby="user-email"
-                    >
-                    <a class="dropdown-item" href="#">
-                        Logout
-                    </a>
+</head>
 
-                </div> 
+<body class="h-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                Wallpaper App admin
+            </a>
+
+            <div class="dropdown navbar-right">
+                <button id="logout" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Logout
+                </button>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <div class="row h-100 bg-light">
-            <div class="col-lg-2 bg-secondary">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span class="text-dark">
-                                Image
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span class="text-dark">
-                                Categories
-                            </span>
-                        </a>
-                    </li>
 
-                </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="users">Select Users</label>
+                    <select class="form-control" size="10" id="users" multiple>
+
+                    </select>
+                </div>
             </div>
-
-            <div class="col-lg-10">
-                <div class="container">
-                    <h1>Images</h1>    
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label for="title">Notification title</label>
+                    <input type="text" class="form-control" id="title" placeholder="notification title" />
+                </div>
+                <div class="form-group">
+                    <label for="body">Notification Body</label>
+                    <input type="text" class="form-control" id="body" placeholder="notification body" />
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="btn-send">Send</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="js/apps.js"></script>
-        <script>
-                firebase.auth().onAuthStateChanged( function(user){
-                    if(!user){
-                        window.location.href = "index.html";
-                    }
+
+    <script src="js/apps.js"></script>
+
+    <script>
+
+        var db = firebase.database().ref("users");
+        db.once("value").then(function (snapshot) {
+
+            $("#users").empty();
+            if (snapshot.exists()) {
+                snapshot.forEach(function (userSnapshot) {
+                    var html = "<option value='";
+                    html += userSnapshot.val().token;
+                    html += "'>";
+                    html += userSnapshot.val().email;
+                    html += "</option>";
+                    $("#users").append(html);
                 });
-        </script>
+            }
+        });
+        $("#btn-send").click(function () {
+            var to = $("#users").val();
+            var title = $("#title").val();
+            var body = $("#body").val();
+            $.ajax({
+                type: 'POST',
+                url: 'https://fcm.googleapis.com/fcm/send',
+                headers: {
+                    Authorization: 'key=AIzaSyAXlhJjH0zNoAEJTdolSYZnPacQmiJ0Jew'
+                },
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    "registration_ids": to,
+                    "notification": {
+                        "title": title,
+                        "body": body
+                    }
+                }),
+                success: function (response) {
+                    alert("Sent to " + response.success + " Devices");
+                },
+                error: function (error) {
+                    alert("Some error occurred");
+                }
+            });
+        });
+    </script>
 
-    </body>
+
+
+    <script>
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (!user) {
+                window.location.href = "index.html";
+            }
+        });
+
+        $("#logout").click(function () {
+            firebase.auth().signOut();
+        });
+    </script>
+
+</body>
+
 </html>

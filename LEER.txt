@@ -1,0 +1,2 @@
+RECORDAR:
+Debo arrancar http-server en esta carpeta

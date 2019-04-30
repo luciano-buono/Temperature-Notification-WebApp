@@ -8,14 +8,9 @@
 			  crossorigin="anonymous">
               </script>
 		<link rel="stylesheet" href="css/style.css"/>
-        <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-database.js"></script> 
-        <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-auth.js"></script>﻿
+
         
     </head>
-
-    
     <body class="bg-dark">
 
         <div id="login-card" class="card">
@@ -42,15 +37,7 @@
             </div>
 
         </div>
-
         <script src="js/apps.js"></script>
 
-        <script>
-            firebase.auth().onAuthStateChanged( function(user){
-                if(user){
-                    window.location.href = "admin.html";
-                }
-            });
-        </script>
     </body>
 </html>
